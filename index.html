@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+
+    <title>Minesweeper</title>
+</head>
+
+<body onload="init()" oncontextmenu="return false;">
+
+    <div class="header">
+
+        <h1></h1>
+
+        <div class="reset" onclick="init()">
+            <img src="img/play.ico" alt="smiley">
+        </div>
+        <div class="flags-count"><img src="img/flag.png"><span>0</span></div>
+
+        <div class="timer"><span>0</span><img src="img/clock.png"></div>
+
+    </div>
+
+    <div class="center">
+
+        <table class="field">
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
+    <div class="bottom">
+
+        <div class="difficulty" onclick="setGameDifficulty('easy');init();">
+            Easy
+        </div>
+        <div class="difficulty" onclick="setGameDifficulty('normal');init();">
+            Normal
+        </div>
+        <div class="difficulty" onclick="setGameDifficulty('hard');init();">
+            Hard
+        </div>
+
+    </div>
+    <div class="footer">
+        <h6>Good Luck</h6>
+    </div>
+
+
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

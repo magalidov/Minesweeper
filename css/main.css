@@ -1,0 +1,172 @@
+.header{
+     text-align: center;
+     margin-bottom: 10px;
+}
+.header h1 {
+    color:black;
+}
+.reset{
+    display:block;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+.reset:hover{
+    cursor: pointer;
+    opacity: 1;
+}
+.header img{
+    width: 30px;
+}
+.flags-count{
+    position: relative;
+    display:inline-block;
+    margin: auto;
+    width: 70px;
+    height: 30px;
+    line-height: 30px;
+    background-color: rgb(83, 244, 255);
+    overflow: hidden;
+}
+.flags-count img {
+    width: 20px;
+    opacity: 0.3;
+    position: absolute;
+    left: 5px;
+    top: 5px
+
+}
+.flags-count span {
+    font-size: 18px;
+    position: absolute;
+    right: 23px;
+}
+.timer{
+    position: relative;
+    display:inline-block;
+    margin: auto;
+    width: 70px;
+    height: 30px;
+    line-height: 30px;
+    background-color: rgb(252, 77, 77);
+    overflow: hidden;
+}
+.timer img {
+    width: 20px;
+    opacity: 0.6;
+    position: absolute;
+    right: 2px;
+    top: 5px 
+}
+.timer span {
+    font-size: 18px;
+    position: absolute;
+    left: 23px;
+}
+/* .center{
+    
+} */
+.field{
+    border-collapse: collapse;
+    margin: auto;
+}
+.field td{
+    border: 2px solid rgb(255, 255, 255,0);
+    height: 27px;
+    width: 27px;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    
+}
+.field div{
+    opacity: 0.8;
+    margin: auto;
+    text-align: center;
+    line-height: 27px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+.field div:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+.field img{
+    line-height: 27px;
+    vertical-align: middle;
+    width: 22px;
+}
+.uncklicked{
+    height: 30px;
+    width: 30px;
+    background: rgb(163, 163, 163);
+}
+.flaged{
+    height: 30px;
+    width: 30px;
+    background: rgb(178, 226, 230);
+    
+}
+.mine{
+    height: 30px;
+    width: 30px;
+    background: rgb(252, 77, 77);
+}
+.blown{
+    height: 30px;
+    width: 30px;
+    background: rgb(247, 13, 13);
+    
+}
+.show-amount{
+    height: 30px;
+    width: 30px;
+    background: rgb(202, 202, 202);
+    
+}
+.num1{
+    color: rgb(0, 119, 255);
+}
+.num2{
+    color: rgb(81, 151, 1);
+}
+.num3{
+    color: rgb(252, 76, 164);
+}
+.num4{
+    color: rgb(175, 120, 0);
+}
+.num5{
+    color: rgb(138, 0, 0);
+}
+.num6{
+    color: rgb(0, 158, 119);
+}
+.num7{
+    color: rgb(0, 0, 0);
+}
+.num8{
+    color: rgb(119, 119, 119);
+}
+.bottom{
+     text-align: center;
+     margin-top: 10px;
+}
+.difficulty{
+    display:inline-block;
+    margin: auto;
+    width: 60px;
+    background-color: rgb(202, 202, 202);
+}
+.difficulty:hover{
+    background-color: rgb(165, 165, 165);
+    cursor: pointer;
+}
+.footer{
+    text-align: center;
+}
+.footer h6 {
+    color:black(207, 136, 4, 0.925);
+}
