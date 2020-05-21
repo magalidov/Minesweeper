@@ -8,17 +8,54 @@
 .reset{
     display:block;
     margin: auto;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     opacity: 0.8;
     margin-bottom: 10px;
 }
-.reset:hover{
+.reset img{
+    width: 30px;
+}
+.reset img:hover{
     cursor: pointer;
+    width: 35px;
     opacity: 1;
 }
-.header img{
-    width: 30px;
+
+.hearts {
+    height: 26px;
+    margin-bottom: 8px;
+}
+.hearts img {
+    width: 17px;
+    opacity: 0.7;
+    transition: 0.2s;
+    margin-left: 7px;
+    margin-right: 7px;
+    display: none;
+
+}
+.hearts img:hover {
+    width: 22px;
+    opacity: 1;
+}
+.safe-clicks {
+    height: 26px;
+    margin-bottom: 8px;
+}
+.safe-clicks img {
+    width: 23px;
+    opacity: 0.9;
+    transition: 0.2s;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: none;
+
+}
+.safe-clicks img:hover {
+    cursor: pointer;
+    width: 18px;
+    opacity: 1;
 }
 .flags-count{
     position: relative;
@@ -41,7 +78,7 @@
 .flags-count span {
     font-size: 18px;
     position: absolute;
-    right: 23px;
+    right: 10px;
 }
 .timer{
     position: relative;
@@ -63,7 +100,7 @@
 .timer span {
     font-size: 18px;
     position: absolute;
-    left: 23px;
+    left: 10px;
 }
 /* .center{
     
@@ -73,9 +110,9 @@
     margin: auto;
 }
 .field td{
-    border: 2px solid rgb(255, 255, 255,0);
-    height: 27px;
-    width: 27px;
+    border: 3px solid rgb(255, 255, 255,0);
+    height: 33px;
+    width: 33px;
     padding: 0px;
     text-align: center;
     vertical-align: middle;
@@ -85,7 +122,9 @@
     opacity: 0.8;
     margin: auto;
     text-align: center;
-    line-height: 27px;
+    height: 33px;
+    width: 33px;
+    line-height: 33px;
     vertical-align: middle;
     overflow: hidden;
 }
@@ -99,32 +138,16 @@
     width: 22px;
 }
 .uncklicked{
-    height: 30px;
-    width: 30px;
     background: rgb(163, 163, 163);
 }
 .flaged{
-    height: 30px;
-    width: 30px;
     background: rgb(178, 226, 230);
-    
 }
 .mine{
-    height: 30px;
-    width: 30px;
     background: rgb(252, 77, 77);
 }
-.blown{
-    height: 30px;
-    width: 30px;
-    background: rgb(247, 13, 13);
-    
-}
 .show-amount{
-    height: 30px;
-    width: 30px;
     background: rgb(202, 202, 202);
-    
 }
 .num1{
     color: rgb(0, 119, 255);

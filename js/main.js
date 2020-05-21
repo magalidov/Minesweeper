@@ -1,10 +1,9 @@
 'use strict'
 var gField = [];
-var gLevel = { size: 4, mines: 2, difficulty: 'easy' };
+var gLevel = { size: 5, mines: 5, difficulty: 'easy' };
 var gGame = {};
 var gStartTime;
 var gRunTime;
-var gState = 'play';
 
 
 function init() {
@@ -14,20 +13,21 @@ function init() {
         shownCount: 0,
         flagsCount: 0,
         flagedMinesCount: 0,
-        secsPassed: 0
+        secsPassed: 0,
+        lives: 3,
+        shields: 3,
+        state: 'play',
     };
-    gState = 'play';
     clearInterval(gRunTime);
     gField = modelField(gLevel.size);
     updateModelData();
-    renderField();
-    renderSmiley();
+    renderElements();
 }
 
 function setGameDifficulty(difficulty) {
     if (difficulty === 'easy') {
-        gLevel.size = 4;
-        gLevel.mines = 2;
+        gLevel.size = 5;
+        gLevel.mines = 5;
         gLevel.difficulty = difficulty;
     }
     if (difficulty === 'normal') {
@@ -45,26 +45,30 @@ function setGameDifficulty(difficulty) {
 function gameOver() {
     clearInterval(gRunTime);
     gGame.isOn = false;
-    gState = 'lost';
-    renderSmiley();
-    updateModelData();
-    renderField();
+    gGame.state = 'lost';
     renderStats();
+    renderElements();
 }
 function checkIfCleared() {
-    if ((gGame.markedMinesCount + gGame.shownCount) === (gLevel.size ** 2)) {
+    if ((gGame.flagedMinesCount + gGame.shownCount) === (gLevel.size ** 2)) {
         clearInterval(gRunTime);
         gGame.isOn = false;
-        gState = 'win';
-        renderSmiley();
-        updateModelData();
-        renderField();
+        gGame.state = 'win';
         renderStats();
+        renderElements();
+    } else return
+}
+function loseLife() {
+
+    if (gGame.lives === 1) {
+        gGame.lives--
+        gameOver()
+    } else {
+        gGame.lives--
+        gGame.state = 'saved'
+        renderElements();
     }
 }
-
-
-
 
 function cellClicked(event, cell) {
     var clickType = (event.type === 'click') ? 'L' : (event.type === 'contextmenu') ? 'R' : null;
@@ -72,9 +76,10 @@ function cellClicked(event, cell) {
     var j = +cell.dataset.j;
     var modelCell = gField[i][j];
 
-    if (gState !== 'play') return;
+    if (modelCell.isShown) return;
+    if (gGame.state !== 'play' && gGame.state !== 'saved') return;
     if (gGame.isOn === false) {
-        if (clickType === 'R') modelCell.isFlaged = true;
+        if (clickType === 'R') return
         if (clickType === 'L') {
             modelCell.isShown = true;
             plantMines(gLevel.mines);
@@ -90,7 +95,6 @@ function cellClicked(event, cell) {
         return;
     }
 
-
     if (clickType === 'L') {
         if (modelCell.isFlaged) {
             return;
@@ -102,7 +106,7 @@ function cellClicked(event, cell) {
         }
         if (modelCell.isMine) {
             modelCell.isShown = true;
-            gameOver();
+            loseLife()
         }
     }
     if (clickType === 'R') {
@@ -112,6 +116,39 @@ function cellClicked(event, cell) {
     updateModelData();
     checkIfCleared();
     renderField();
+}
+
+function safeClick() {
+    if (!gGame.isOn) return
+    var validCells = []
+    for (var i = 1; i < gField.length; i++) {
+        for (var j = 1; j < gField[i].length; j++) {
+            var currCell = gField[i][j];
+            if (!currCell.isMine && !currCell.isShown && !currCell.isFlaged) {
+                validCells.push(currCell)
+            }
+        }
+    }
+    if(validCells===[]) return
+
+    gGame.shields--
+    var randNum = getRandomIntInclusive(0, validCells.length - 1);
+    var randCell = validCells.splice(randNum,1)
+    var pickedI= randCell[0].loc.i
+    var pickedJ=randCell[0].loc.j
+
+    for (var i = 1; i < gField.length; i++) {
+        for (var j = 1; j < gField[i].length; j++) {
+            var currCell= gField[i][j]
+            if (currCell === gField[pickedI][pickedJ]){
+                currCell.isShown=true
+                if (currCell.minesAroundCount===0) revealSurroundings(pickedI,pickedJ)
+            }
+
+        }
+    }
+    updateModelData()
+    renderElements()
 }
 
 function revealSurroundings(cellI, cellJ) {
@@ -139,21 +176,58 @@ function revealSurroundings(cellI, cellJ) {
 }
 
 function renderStats() {
-
     var currTime = new Date();
     gGame.secsPassed = Math.round((currTime.getTime() - gStartTime.getTime()) / 1000);
     var elTimeLoc = document.querySelector('.timer span');
     elTimeLoc.innerText = gGame.secsPassed;
 
-    var elFlagsLoc = document.querySelector('.flags-count span');
-    elFlagsLoc.innerText = gGame.flagsCount;
+    if (gGame.state === 'lost' || gGame.state === 'win') {
+        var elFlagsLoc = document.querySelector('.flags-count span');
+        elFlagsLoc.innerText = `${gGame.flagedMinesCount}/${gLevel.mines}`;
+    } else {
+        var elFlagsLoc = document.querySelector('.flags-count span');
+        elFlagsLoc.innerText = gGame.flagsCount;
+    }
 }
 
+function renderElements() {
+    renderField();
+    renderSmiley();
+    renderHearts();
+    renderShields();
+}
 
 function renderSmiley() {
 
     var elResetButton = document.querySelector('.reset');
-    elResetButton.innerHTML = `<img src="img/${gState}.ico" alt="smiley">`;
+    elResetButton.innerHTML = `<img src="img/${gGame.state}.png" alt="smiley">`;
+}
+
+function renderHearts() {
+    var deadHearts = 3
+
+    for (var i = 1; i <= gGame.lives; i++) {
+        var elHeart = document.querySelector(`.heart${i}`)
+        deadHearts = 3 - i
+        elHeart.style.display = 'inline-block'
+    }
+    for (var i = 0 + deadHearts; i > 0; i--) {
+        var elHeart = document.querySelector(`.heart${i}`)
+        elHeart.style.display = 'none'
+    }
+}
+function renderShields() {
+    var usedShields = 3
+
+    for (var i = 1; i <= gGame.shields; i++) {
+        var elShield = document.querySelector(`.safe${i}`)
+        usedShields = 3 - i
+        elShield.style.display = 'inline-block'
+    }
+    for (var i = 0 + usedShields; i > 0; i--) {
+        var elShield = document.querySelector(`.safe${i}`)
+        elShield.style.display = 'none'
+    }
 }
 
 function renderField() {
@@ -188,7 +262,7 @@ function updateModelData() {
 
     for (var i = 0; i < gField.length; i++) {
         for (var j = 0; j < gField[i].length; j++) {
-            if (gState === 'lost' && gField[i][j].isMine) {
+            if (gGame.state === 'lost' && gField[i][j].isMine) {
                 gField[i][j].isShown = true;
             }
             if (gGame.isOn === false) {
@@ -200,7 +274,7 @@ function updateModelData() {
             if (gField[i][j].isMine && gField[i][j].isFlaged) flagedMines++;
         }
     }
-    gGame.markedMinesCount = flagedMines;
+    gGame.flagedMinesCount = flagedMines;
     gGame.shownCount = shown;
     gGame.flagsCount = flags;
 }
