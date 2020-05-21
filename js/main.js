@@ -138,7 +138,9 @@ function safeClick() {
             }
         }
     }
-    if (validCells.length === []) return
+    if (validCells.length === 0) return
+    console.log('validCells:', validCells)
+    console.log('validCells:', validCells.length)
     gGame.shields--
     renderShields()
 
