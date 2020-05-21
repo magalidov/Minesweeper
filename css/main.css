@@ -149,6 +149,10 @@
 .show-amount{
     background: rgb(202, 202, 202);
 }
+.safe div{
+    transition: 0.5s;
+    background: rgb(57, 208, 122);
+}
 .num1{
     color: rgb(0, 119, 255);
 }

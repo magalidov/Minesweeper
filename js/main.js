@@ -1,6 +1,6 @@
 'use strict'
 var gField = [];
-var gLevel = { size: 5, mines: 5, difficulty: 'easy' };
+var gLevel = { size: 5, mines: 4, difficulty: 'easy' };
 var gGame = {};
 var gStartTime;
 var gRunTime;
@@ -27,7 +27,7 @@ function init() {
 function setGameDifficulty(difficulty) {
     if (difficulty === 'easy') {
         gLevel.size = 5;
-        gLevel.mines = 5;
+        gLevel.mines = 4;
         gLevel.difficulty = difficulty;
     }
     if (difficulty === 'normal') {
@@ -37,7 +37,7 @@ function setGameDifficulty(difficulty) {
     }
     if (difficulty === 'hard') {
         gLevel.size = 12;
-        gLevel.mines = 20;
+        gLevel.mines = 25;
         gLevel.difficulty = difficulty;
     }
 }
@@ -63,7 +63,11 @@ function loseLife() {
     if (gGame.lives === 1) {
         gGame.lives--
         gameOver()
-    } else {
+    } else if (gGame.lives === 2) {
+        gGame.lives--
+        gGame.state = 'saved2'
+        renderElements();
+    } else { 
         gGame.lives--
         gGame.state = 'saved'
         renderElements();
@@ -77,7 +81,10 @@ function cellClicked(event, cell) {
     var modelCell = gField[i][j];
 
     if (modelCell.isShown) return;
-    if (gGame.state !== 'play' && gGame.state !== 'saved') return;
+    if (gGame.state !== 'play' 
+    && gGame.state !== 'saved' 
+    && gGame.state !== 'saved2') return;
+
     if (gGame.isOn === false) {
         if (clickType === 'R') return
         if (clickType === 'L') {
@@ -124,32 +131,26 @@ function safeClick() {
     for (var i = 1; i < gField.length; i++) {
         for (var j = 1; j < gField[i].length; j++) {
             var currCell = gField[i][j];
-            if (!currCell.isMine && !currCell.isShown && !currCell.isFlaged) {
+            if (currCell.isMine === false
+                && currCell.isShown === false
+                && currCell.isFlaged === false) {
                 validCells.push(currCell)
             }
         }
     }
-    if(validCells===[]) return
-
+    if (validCells.length === []) return
     gGame.shields--
+    renderShields()
+
     var randNum = getRandomIntInclusive(0, validCells.length - 1);
-    var randCell = validCells.splice(randNum,1)
-    var pickedI= randCell[0].loc.i
-    var pickedJ=randCell[0].loc.j
-
-    for (var i = 1; i < gField.length; i++) {
-        for (var j = 1; j < gField[i].length; j++) {
-            var currCell= gField[i][j]
-            if (currCell === gField[pickedI][pickedJ]){
-                currCell.isShown=true
-                if (currCell.minesAroundCount===0) revealSurroundings(pickedI,pickedJ)
-            }
-
-        }
-    }
-    updateModelData()
-    renderElements()
+    var randCell = validCells.splice(randNum, 1)
+    var pickedI = randCell[0].loc.i
+    var pickedJ = randCell[0].loc.j
+    var elCell = document.querySelector(`[data-i="${pickedI}"][data-j="${pickedJ}"]`)
+    elCell.classList.add('safe')
+    setTimeout(function(){elCell.classList.remove('safe')}, 3000)
 }
+
 
 function revealSurroundings(cellI, cellJ) {
 
@@ -240,11 +241,11 @@ function renderField() {
             var around = (cellModel.minesAroundCount) ? (cellModel.minesAroundCount) : '';
             var locData = `data-i="${cellModel.loc.i}" data-j="${cellModel.loc.j}"`;
             var cssClass = `${(cellModel.isFlaged) ? 'flaged' : (!cellModel.isShown) ? 'uncklicked' : (cellModel.isMine) ? 'mine' : 'show-amount'}`;
-            var cssClass2 = `${(around) ? (around) : ''}`;
+            var cssClassNumColor = `${(around) ? (around) : ''}`;
             var innerInfo = (cellModel.isShown) ? around : '';
             var imgType = (cellModel.isMine && cellModel.isShown) ? 'mine' : (cellModel.isFlaged) ? 'flag' : 'empty';
             var innerImg = `<img src="img/${imgType}.png"></img>`;
-            var innerDiv = `<div class="${cssClass} num${cssClass2}">${innerInfo} ${innerImg}</div>`;
+            var innerDiv = `<div class="${cssClass} num${cssClassNumColor}">${innerInfo} ${innerImg}</div>`;
             strHTML += `<td ${locData} onclick="cellClicked(event,this)" oncontextmenu="cellClicked(event,this)">${innerDiv}</td>`;
         }
         strHTML += '</tr>';
