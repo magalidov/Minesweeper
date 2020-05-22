@@ -4,7 +4,8 @@ var gLevel = { size: 5, mines: 4, difficulty: 'easy' };
 var gGame = {};
 var gStartTime;
 var gRunTime;
-
+var gOriginalState = '';
+var gOriginalField = [];
 
 function init() {
     gStartTime = 0;
@@ -16,6 +17,7 @@ function init() {
         secsPassed: 0,
         lives: 3,
         shields: 3,
+        eyes: 3,
         state: 'play',
     };
     clearInterval(gRunTime);
@@ -67,7 +69,7 @@ function loseLife() {
         gGame.lives--
         gGame.state = 'saved2'
         renderElements();
-    } else { 
+    } else {
         gGame.lives--
         gGame.state = 'saved'
         renderElements();
@@ -80,10 +82,8 @@ function cellClicked(event, cell) {
     var j = +cell.dataset.j;
     var modelCell = gField[i][j];
 
+    if (gGame.state === 'win' || gGame.state === 'lost' || gOriginalState === 'hint') return;
     if (modelCell.isShown) return;
-    if (gGame.state !== 'play' 
-    && gGame.state !== 'saved' 
-    && gGame.state !== 'saved2') return;
 
     if (gGame.isOn === false) {
         if (clickType === 'R') return
@@ -91,38 +91,72 @@ function cellClicked(event, cell) {
             modelCell.isShown = true;
             plantMines(gLevel.mines);
             updateModelData();
-            if (modelCell.minesAroundCount === 0) {
-                revealSurroundings(i, j);
-            }
+            if (modelCell.minesAroundCount === 0) revealSurroundings(i, j);
             renderField();
-        }
-        gGame.isOn = true;
-        gStartTime = new Date();
-        gRunTime = setInterval(renderStats, 100);
-        return;
-    }
-
-    if (clickType === 'L') {
-        if (modelCell.isFlaged) {
+            gOriginalField = saveCurrField()
+            gGame.isOn = true;
+            gStartTime = new Date();
+            gRunTime = setInterval(renderStats, 100);
             return;
-        } else {
-            modelCell.isShown = true;
-            if (modelCell.minesAroundCount === 0) {
-                revealSurroundings(i, j)
-            }
-        }
-        if (modelCell.isMine) {
-            modelCell.isShown = true;
-            loseLife()
         }
     }
-    if (clickType === 'R') {
+    if (clickType === 'L') {
+        gOriginalField = saveCurrField()
+        if (gGame.state === 'hint') {
+            revealSurroundings(i, j)
+            renderElements();
+            gGame.state = gOriginalState
+            gOriginalState = 'hint'
+            setTimeout(function () {
+                gOriginalState = gGame.state
+                gField = gOriginalField;
+                renderElements();
+            }, 1400)
+            return
+        }
+        if (modelCell.isFlaged) return;
+        modelCell.isShown = true;
+        if (modelCell.minesAroundCount === 0) revealSurroundings(i, j)
+        if (modelCell.isMine) loseLife()
+
+    } else if (clickType === 'R') {
+        gOriginalField = saveCurrField()
+        if (gGame.state === 'hint') {
+            gGame.state = gOriginalState
+            gGame.eyes++
+            renderElements()
+            return
+        }
         if (modelCell.isShown) return;
         modelCell.isFlaged = !modelCell.isFlaged;
     }
     updateModelData();
     checkIfCleared();
     renderField();
+}
+
+function saveCurrField() {
+    var newCopy = []
+
+    for (var i = 0; i < gLevel.size; i++) {
+        newCopy[i] = [];
+        for (var j = 0; j < gLevel.size; j++) {
+
+            var cell = {
+                loc: {
+                    i: gField[i][j].loc.i,
+                    j: gField[i][j].loc.j,
+                },
+                minesAroundCount: gField[i][j].minesAroundCount,
+                isShown: gField[i][j].isShown,
+                isMine: gField[i][j].isMine,
+                isFlaged: gField[i][j].isFlaged,
+            };
+
+            newCopy[i][j] = cell;
+        }
+    }
+    return newCopy
 }
 
 function safeClick() {
@@ -139,8 +173,6 @@ function safeClick() {
         }
     }
     if (validCells.length === 0) return
-    console.log('validCells:', validCells)
-    console.log('validCells:', validCells.length)
     gGame.shields--
     renderShields()
 
@@ -150,7 +182,15 @@ function safeClick() {
     var pickedJ = randCell[0].loc.j
     var elCell = document.querySelector(`[data-i="${pickedI}"][data-j="${pickedJ}"]`)
     elCell.classList.add('safe')
-    setTimeout(function(){elCell.classList.remove('safe')}, 3000)
+    setTimeout(function () { elCell.classList.remove('safe') }, 3000)
+}
+
+function glanceMode() {
+    if (gGame.isOn === false || gGame.state === 'hint') return
+    gOriginalState = gGame.state
+    gGame.state = 'hint'
+    gGame.eyes--
+    renderElements()
 }
 
 
@@ -163,8 +203,13 @@ function revealSurroundings(cellI, cellJ) {
 
             if (j < 0 || j >= gField[i].length) continue;
             if (i === cellI && j === cellJ) continue;
-
             var currCell = gField[i][j];
+
+            if (gGame.state === 'hint') {
+                if (gField[cellI][cellJ].isShown === false) gField[cellI][cellJ].isShown = true
+                if (currCell.isShown === false) currCell.isShown = true
+                continue
+            }
 
             if (currCell.isMine || currCell.isFlaged || currCell.isShown) {
                 continue;
@@ -198,10 +243,10 @@ function renderElements() {
     renderSmiley();
     renderHearts();
     renderShields();
+    renderEyes()
 }
 
 function renderSmiley() {
-
     var elResetButton = document.querySelector('.reset');
     elResetButton.innerHTML = `<img src="img/${gGame.state}.png" alt="smiley">`;
 }
@@ -232,6 +277,19 @@ function renderShields() {
         elShield.style.display = 'none'
     }
 }
+function renderEyes() {
+    var usedEyes = 3
+
+    for (var i = 1; i <= gGame.eyes; i++) {
+        var elEye = document.querySelector(`.hint${i}`)
+        usedEyes = 3 - i
+        elEye.style.display = 'inline-block'
+    }
+    for (var i = 0 + usedEyes; i > 0; i--) {
+        var elEye = document.querySelector(`.hint${i}`)
+        elEye.style.display = 'none'
+    }
+}
 
 function renderField() {
     var strHTML = '';
@@ -244,10 +302,11 @@ function renderField() {
             var locData = `data-i="${cellModel.loc.i}" data-j="${cellModel.loc.j}"`;
             var cssClass = `${(cellModel.isFlaged) ? 'flaged' : (!cellModel.isShown) ? 'uncklicked' : (cellModel.isMine) ? 'mine' : 'show-amount'}`;
             var cssClassNumColor = `${(around) ? (around) : ''}`;
+            var cssClassMode = `${(gGame.state === 'hint') ? 'glance' : ''}`;
             var innerInfo = (cellModel.isShown) ? around : '';
             var imgType = (cellModel.isMine && cellModel.isShown) ? 'mine' : (cellModel.isFlaged) ? 'flag' : 'empty';
             var innerImg = `<img src="img/${imgType}.png"></img>`;
-            var innerDiv = `<div class="${cssClass} num${cssClassNumColor}">${innerInfo} ${innerImg}</div>`;
+            var innerDiv = `<div class="${cssClass} num${cssClassNumColor} ${cssClassMode}">${innerInfo} ${innerImg}</div>`;
             strHTML += `<td ${locData} onclick="cellClicked(event,this)" oncontextmenu="cellClicked(event,this)">${innerDiv}</td>`;
         }
         strHTML += '</tr>';
@@ -314,6 +373,7 @@ function modelField(size) {
     for (var i = 0; i < size; i++) {
         fieldModel[i] = [];
         for (var j = 0; j < size; j++) {
+
             var cell = {
                 loc: {
                     i: i,

@@ -1,58 +1,68 @@
 .header{
      text-align: center;
-     margin-bottom: 10px;
-}
-.header h1 {
-    color:black;
+     margin-top: 20px;
+     margin-bottom: 1px;
 }
 .reset{
-    display:block;
-    margin: auto;
-    width: 35px;
-    height: 35px;
-    opacity: 0.8;
-    margin-bottom: 10px;
+    display: block;
+    height: 37px;
+    margin-bottom: 3px;
 }
-.reset img{
+.reset img {
+    opacity: 0.85;
     width: 30px;
 }
-.reset img:hover{
+.reset img:hover {
     cursor: pointer;
-    width: 35px;
+    width: 34px;
     opacity: 1;
 }
-
 .hearts {
-    height: 26px;
-    margin-bottom: 8px;
+    height: 25px;
+    margin-bottom: 1px;
 }
 .hearts img {
     width: 17px;
     opacity: 0.7;
     transition: 0.2s;
-    margin-left: 7px;
-    margin-right: 7px;
+    margin-left: 4px;
+    margin-right: 4px;
     display: none;
-
 }
 .hearts img:hover {
-    width: 22px;
+    width: 21px;
     opacity: 1;
 }
 .safe-clicks {
-    height: 26px;
-    margin-bottom: 8px;
+    height: 25px;
 }
 .safe-clicks img {
+    width: 21px;
+    opacity: 0.9;
+    transition: 0.2s;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: none;
+}
+.safe-clicks img:hover {
+    cursor: pointer;
+    width: 15px;
+    opacity: 1;
+}
+.hints {
+    text-align: center;
+    margin-top: 0px;
+}
+.hints img {
     width: 23px;
     opacity: 0.9;
     transition: 0.2s;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
     display: none;
 
 }
-.safe-clicks img:hover {
+.hints img:hover {
     cursor: pointer;
     width: 18px;
     opacity: 1;
@@ -68,7 +78,7 @@
     overflow: hidden;
 }
 .flags-count img {
-    width: 20px;
+    width: 18px;
     opacity: 0.3;
     position: absolute;
     left: 5px;
@@ -137,8 +147,18 @@
     vertical-align: middle;
     width: 22px;
 }
+.undo-button{
+    width: 20px;
+
+}
 .uncklicked{
     background: rgb(163, 163, 163);
+}
+.glance{
+    background: rgb(172, 209, 235);
+}
+.glance:hover{
+    background: rgb(41, 158, 236);
 }
 .flaged{
     background: rgb(178, 226, 230);

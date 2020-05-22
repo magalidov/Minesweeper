@@ -13,27 +13,27 @@
 
     <div class="header">
 
-        <h1>
-        
-        </h1>
-
-        <div class="reset" onclick="init()">
-        
-        </div>
+        <div class="reset" onclick="init()"></div>
 
         <div class="hearts">
             <img src="img/heart.png" class="heart1" alt="heart">
             <img src="img/heart.png" class="heart2" alt="heart">
             <img src="img/heart.png" class="heart3" alt="heart">
         </div>
+
         <div class="safe-clicks">
             <img src="img/safe.png" class="safe1" onclick="safeClick()" alt="shield">
             <img src="img/safe.png" class="safe2" onclick="safeClick()" alt="shield">
             <img src="img/safe.png" class="safe3" onclick="safeClick()" alt="shield">
         </div>
 
-        <div class="flags-count"><img src="img/flag.png"><span>0</span></div>
+        <div class="hints">
+            <img src="img/hint.png" class="hint1" onclick="glanceMode()" alt="undo">
+            <img src="img/hint.png" class="hint2" onclick="glanceMode()" alt="undo">
+            <img src="img/hint.png" class="hint3" onclick="glanceMode()" alt="undo">
+        </div>
 
+        <div class="flags-count"><img src="img/flag.png"><span>0</span></div>
         <div class="timer"><span>0</span><img src="img/clock.png"></div>
 
     </div>
@@ -41,13 +41,14 @@
     <div class="center">
 
         <table class="field">
-
             <tbody></tbody>
-
         </table>
 
     </div>
 
+
+
+    <!-- <img src="img/undo.png" class="undo-button" onclick="" alt="undo"> -->
     <div class="bottom">
 
         <div class="difficulty" onclick="setGameDifficulty('easy');init();">
