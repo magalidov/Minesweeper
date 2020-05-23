@@ -1,9 +1,11 @@
+'use strict'
 var gOriginalField = [];
 var gOriginalGame = {};
 var gOriginalState = '';
 
 function safeClick() {
     if (!gGame.isOn) return;
+
     var validCells = [];
     for (var i = 1; i < gField.length; i++) {
         for (var j = 1; j < gField[i].length; j++) {
@@ -38,7 +40,10 @@ function glanceModeOn() {
 
 
 function undo() {
-    if (gGame.state === 'win' || gGame.state === 'lost' || gOriginalState === 'hint') return;
+    if (gGame.state === 'win' 
+    || gGame.state === 'lost' 
+    || gOriginalState === 'hint') return;
+    
     gField = gOriginalField;
     gGame = gOriginalGame;
     renderElements();

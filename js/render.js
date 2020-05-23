@@ -1,3 +1,4 @@
+'use strict'
 function renderElements() {
     renderField();
     renderSmiley();
@@ -56,7 +57,7 @@ function renderStats() {
     gGame.secsPassed = Math.round((currTime.getTime() - gStartTime.getTime()) / 1000);
     var elTimeLoc = document.querySelector('.timer span');
     elTimeLoc.innerText = gGame.secsPassed;
-    //Flaged Counter
+    //Flaged Counter:
     if (gGame.state === 'lost' || gGame.state === 'win') {
         var elFlagsLoc = document.querySelector('.flags-count span');
         elFlagsLoc.innerText = `${gGame.flagedMinesCount}/${gLevel.mines}`;
@@ -80,8 +81,10 @@ function renderField() {
             var cssClassMode = `${(gGame.state === 'hint') ? 'glance' : ''}`;
             var innerInfo = (cellModel.isShown) ? around : '';
             var imgType = (cellModel.isMine && cellModel.isShown) ? 'mine' : (cellModel.isFlaged) ? 'flag' : 'empty';
+            
             var innerImg = `<img src="img/${imgType}.png"></img>`;
             var innerDiv = `<div class="${cssClass} num${cssClassNumColor} ${cssClassMode}">${innerInfo} ${innerImg}</div>`;
+            
             strHTML += `<td ${locData} onclick="cellClicked(event,this)" oncontextmenu="cellClicked(event,this)">${innerDiv}</td>`;
         }
         strHTML += '</tr>';
