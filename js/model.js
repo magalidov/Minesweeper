@@ -45,15 +45,6 @@ function setGameDifficulty(difficulty) {
     }
 }
 
-function gameOver() {
-    clearInterval(gRunTime);
-    gGame.isOn = false;
-    gGame.state = 'lost';
-    renderStats();
-    renderElements();
-    renderUndoAvailble('none');
-    renderBottomText('Game Over');
-}
 function checkIfCleared() {
     if ((gGame.flagedMinesCount + gGame.shownCount) === (gLevel.size ** 2)) {
         clearInterval(gRunTime);
@@ -65,8 +56,9 @@ function checkIfCleared() {
         renderBottomText('All Clear');
     } else return;
 }
+
 function loseLife() {
-    
+
     if (gGame.lives === 1) {
         gGame.lives--;
         gameOver();
@@ -81,15 +73,30 @@ function loseLife() {
     }
 }
 
+function gameOver() {
+    clearInterval(gRunTime);
+    gGame.isOn = false;
+    gGame.state = 'lost';
+    renderStats();
+    renderElements();
+    renderUndoAvailble('none');
+    renderBottomText('Game Over');
+}
+
 function cellClicked(event, cell) {
+
     var clickType = (event.type === 'click') ? 'L' : (event.type === 'contextmenu') ? 'R' : null;
     var i = +cell.dataset.i;
     var j = +cell.dataset.j;
     var modelCell = gField[i][j];
-    
-    if (gGame.state === 'win' || gGame.state === 'lost' || gOriginalState === 'hint') return;
-    if (modelCell.isShown) return;
 
+
+    if (gGame.state === 'win'
+        || gGame.state === 'lost'
+        || gOriginalState === 'hint'
+        || modelCell.isShown) return;
+
+    // First click:
     if (gGame.isOn === false) {
         if (clickType === 'R') return;
         if (clickType === 'L') {
@@ -105,8 +112,11 @@ function cellClicked(event, cell) {
             return;
         }
     }
+
+
     if (clickType === 'L') {
         gOriginalField = saveCurrField();
+
         if (gGame.state === 'hint') {
             revealSurroundings(i, j);
             renderElements();
@@ -119,34 +129,40 @@ function cellClicked(event, cell) {
             }, 1400)
             return;
         }
-        if (modelCell.isFlaged){
-            return;
-        } else {
-            gOriginalGame = saveCurrGameData();
-            renderUndoAvailble('block');
-            modelCell.isShown = true;
-            if (modelCell.isMine){
-                loseLife();
-            } else if (modelCell.minesAroundCount === 0) revealSurroundings(i, j);
-        }
-        
-    } else if (clickType === 'R') {
+        if (modelCell.isFlaged) return;
+
+        gOriginalGame = saveCurrGameData();
+        renderUndoAvailble('block');
+        modelCell.isShown = true;
+
+        if (modelCell.isMine) {
+            loseLife();
+        } else if (modelCell.minesAroundCount === 0) revealSurroundings(i, j);
+    }
+
+
+    if (clickType === 'R') {
         gOriginalField = saveCurrField();
+
         if (gGame.state === 'hint') {
             gGame.state = gOriginalState;
             gGame.eyes++;
             renderElements();
             return;
         }
+
         if (modelCell.isShown) return;
+
         gOriginalGame = saveCurrGameData();
         renderUndoAvailble('block');
         modelCell.isFlaged = !modelCell.isFlaged;
     }
+
     updateModelData();
     checkIfCleared();
     renderField();
 }
+
 
 
 function revealSurroundings(cellI, cellJ) {
@@ -178,31 +194,7 @@ function revealSurroundings(cellI, cellJ) {
     }
 }
 
-function updateModelData() {
-    var flagedMines = 0;
-    var shown = 0;
-    var flags = 0;
-
-    for (var i = 0; i < gField.length; i++) {
-        for (var j = 0; j < gField[i].length; j++) {
-            if (gGame.state === 'lost' && gField[i][j].isMine) {
-                gField[i][j].isShown = true;
-            }
-            if (gGame.isOn === false) {
-                if (gField[i][j].isMine) continue;
-                gField[i][j].minesAroundCount = howManyMines(i, j);
-            }
-            if (gField[i][j].isShown) shown++;
-            if (gField[i][j].isFlaged) flags++;
-            if (gField[i][j].isMine && gField[i][j].isFlaged) flagedMines++;
-        }
-    }
-    gGame.flagedMinesCount = flagedMines;
-    gGame.shownCount = shown;
-    gGame.flagsCount = flags;
-}
-
-function howManyMines(cellI, cellJ) {
+function howManyMinesAround(cellI, cellJ) {
     var minesSum = 0;
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
@@ -215,6 +207,31 @@ function howManyMines(cellI, cellJ) {
     }
     return minesSum;
 }
+
+function updateModelData() {
+    var flagedMines = 0;
+    var shown = 0;
+    var flags = 0;
+
+    for (var i = 0; i < gField.length; i++) {
+        for (var j = 0; j < gField[i].length; j++) {
+            if (gGame.state === 'lost' && gField[i][j].isMine) {
+                gField[i][j].isShown = true;
+            }
+            if (gGame.isOn === false) {
+                if (gField[i][j].isMine) continue;
+                gField[i][j].minesAroundCount = howManyMinesAround(i, j);
+            }
+            if (gField[i][j].isShown) shown++;
+            if (gField[i][j].isFlaged) flags++;
+            if (gField[i][j].isMine && gField[i][j].isFlaged) flagedMines++;
+        }
+    }
+    gGame.flagedMinesCount = flagedMines;
+    gGame.shownCount = shown;
+    gGame.flagsCount = flags;
+}
+
 
 function plantMines(amount) {
 

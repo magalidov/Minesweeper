@@ -50,6 +50,22 @@ function renderEyes() {
     }
 }
 
+function renderStats() {
+    //Timer:
+    var currTime = new Date();
+    gGame.secsPassed = Math.round((currTime.getTime() - gStartTime.getTime()) / 1000);
+    var elTimeLoc = document.querySelector('.timer span');
+    elTimeLoc.innerText = gGame.secsPassed;
+    //Flaged Counter
+    if (gGame.state === 'lost' || gGame.state === 'win') {
+        var elFlagsLoc = document.querySelector('.flags-count span');
+        elFlagsLoc.innerText = `${gGame.flagedMinesCount}/${gLevel.mines}`;
+    } else {
+        var elFlagsLoc = document.querySelector('.flags-count span');
+        elFlagsLoc.innerText = gGame.flagsCount;
+    }
+}
+
 function renderField() {
     var strHTML = '';
 
@@ -76,20 +92,6 @@ function renderField() {
 
 }
 
-function renderStats() {
-    var currTime = new Date();
-    gGame.secsPassed = Math.round((currTime.getTime() - gStartTime.getTime()) / 1000);
-    var elTimeLoc = document.querySelector('.timer span');
-    elTimeLoc.innerText = gGame.secsPassed;
-
-    if (gGame.state === 'lost' || gGame.state === 'win') {
-        var elFlagsLoc = document.querySelector('.flags-count span');
-        elFlagsLoc.innerText = `${gGame.flagedMinesCount}/${gLevel.mines}`;
-    } else {
-        var elFlagsLoc = document.querySelector('.flags-count span');
-        elFlagsLoc.innerText = gGame.flagsCount;
-    }
-}
 
 function renderUndoAvailble(display) {
 var elUndoButton = document.querySelector('.undo');
