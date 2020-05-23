@@ -3,7 +3,7 @@ function renderElements() {
     renderSmiley();
     renderHearts();
     renderShields();
-    renderEyes()
+    renderEyes();
 }
 
 function renderSmiley() {
@@ -12,43 +12,41 @@ function renderSmiley() {
 }
 
 function renderHearts() {
-    var deadHearts = 3
+    var deadHearts = 3;
 
     for (var i = 1; i <= gGame.lives; i++) {
-        var elHeart = document.querySelector(`.heart${i}`)
-        elHeart.style.display = 'inline-block'
-        deadHearts = 3 - i
+        var elHeart = document.querySelector(`.heart${i}`);
+        elHeart.style.display = 'inline-block';
+        deadHearts = 3 - i;
     }
     for (var i = 0 + deadHearts; i > 0; i--) {
-        var elHeart = document.querySelector(`.heart${i}`)
-        elHeart.style.display = 'none'
+        var elHeart = document.querySelector(`.heart${i}`);
+        elHeart.style.display = 'none';
     }
 }
 function renderShields() {
-    var usedShields = 3
+    var usedShields = 3;
 
     for (var i = 1; i <= gGame.shields; i++) {
-        var elShield = document.querySelector(`.safe${i}`)
-        elShield.style.display = 'inline-block'
-        usedShields = 3 - i
+        var elShield = document.querySelector(`.safe${i}`);
+        elShield.style.display = 'inline-block';
+        usedShields = 3 - i;
     }
     for (var i = 0 + usedShields; i > 0; i--) {
-        var elShield = document.querySelector(`.safe${i}`)
-        elShield.style.display = 'none'
+        var elShield = document.querySelector(`.safe${i}`);
+        elShield.style.display = 'none';
     }
 }
 function renderEyes() {
     var usedEyes = 3
-    // 1
     for (var i = 1; i <= gGame.eyes; i++) {
-        console.log('gGame.eyes:', gGame.eyes)
-        var elEye = document.querySelector(`.hint${i}`)
-        elEye.style.display = 'inline-block'
-        usedEyes = 3 - i
+        var elEye = document.querySelector(`.hint${i}`);
+        elEye.style.display = 'inline-block';
+        usedEyes = 3 - i;
     }
     for (var i = 0 + usedEyes; i > 0; i--) {
-        var elEye = document.querySelector(`.hint${i}`)
-        elEye.style.display = 'none'
+        var elEye = document.querySelector(`.hint${i}`);
+        elEye.style.display = 'none';
     }
 }
 
@@ -91,4 +89,14 @@ function renderStats() {
         var elFlagsLoc = document.querySelector('.flags-count span');
         elFlagsLoc.innerText = gGame.flagsCount;
     }
+}
+
+function renderUndoAvailble(display) {
+var elUndoButton = document.querySelector('.undo');
+elUndoButton.style.display= display;
+}
+
+function renderBottomText(insert){
+    var elInformer = document.querySelector('.informer')
+    elInformer.innerText= insert
 }

@@ -28,13 +28,12 @@
 }
 .hearts img {
     width: 17px;
-    opacity: 0.7;
+    opacity: 0.6;
     transition: 0.2s;
     margin-left: 4px;
     margin-right: 4px;
 }
 .hearts img:hover {
-    width: 21px;
     opacity: 1;
 }
 /* .safe-clicks {
@@ -67,14 +66,14 @@
     position: relative;
     display:inline-block;
     margin: auto;
-    width: 87px;
+    width: 86.5px;
     height: 30px;
     line-height: 30px;
     background-color: rgb(83, 244, 255);
     overflow: hidden;
 }
 .flags-count img {
-    width: 18px;
+    width: 17px;
     opacity: 0.3;
     position: absolute;
     left: 5px;
@@ -203,12 +202,12 @@
     cursor: pointer;
 }
 .undo-button{
-    height: 30px;
+    margin-top: 10px;
+    height: 10px;
 }
 .undo-button img{
-    display: block;
+    display: none;
     margin: auto;
-    margin-top: 10px;
     width: 20px;
 }
 .undo-button img:hover{
@@ -219,5 +218,6 @@
     text-align: center;
 }
 .footer h6 {
+    font-size: 11px;
     color:black(207, 136, 4, 0.925);
 }

@@ -4,8 +4,7 @@ var gLevel = { size: 5, mines: 4, difficulty: 'easy' };
 var gGame = {};
 var gStartTime;
 var gRunTime;
-var gOriginalState = '';
-var gOriginalField = [];
+
 
 function init() {
     gStartTime = 0;
@@ -24,6 +23,8 @@ function init() {
     gField = modelField(gLevel.size);
     updateModelData();
     renderElements();
+    renderUndoAvailble('none')
+    renderBottomText('Good Luck')
 }
 
 function setGameDifficulty(difficulty) {
@@ -33,12 +34,12 @@ function setGameDifficulty(difficulty) {
         gLevel.difficulty = difficulty;
     }
     if (difficulty === 'normal') {
-        gLevel.size = 8;
-        gLevel.mines = 12;
+        gLevel.size = 7;
+        gLevel.mines = 10;
         gLevel.difficulty = difficulty;
     }
     if (difficulty === 'hard') {
-        gLevel.size = 12;
+        gLevel.size = 10;
         gLevel.mines = 25;
         gLevel.difficulty = difficulty;
     }
@@ -50,6 +51,8 @@ function gameOver() {
     gGame.state = 'lost';
     renderStats();
     renderElements();
+    renderUndoAvailble('none');
+    renderBottomText('Game Over');
 }
 function checkIfCleared() {
     if ((gGame.flagedMinesCount + gGame.shownCount) === (gLevel.size ** 2)) {
@@ -58,20 +61,22 @@ function checkIfCleared() {
         gGame.state = 'win';
         renderStats();
         renderElements();
-    } else return
+        renderUndoAvailble('none');
+        renderBottomText('All Clear');
+    } else return;
 }
 function loseLife() {
     
     if (gGame.lives === 1) {
-        gGame.lives--
-        gameOver()
+        gGame.lives--;
+        gameOver();
     } else if (gGame.lives === 2) {
-        gGame.lives--
-        gGame.state = 'saved2'
+        gGame.lives--;
+        gGame.state = 'saved2';
         renderElements();
     } else {
-        gGame.lives--
-        gGame.state = 'saved'
+        gGame.lives--;
+        gGame.state = 'saved';
         renderElements();
     }
 }
@@ -86,14 +91,14 @@ function cellClicked(event, cell) {
     if (modelCell.isShown) return;
 
     if (gGame.isOn === false) {
-        if (clickType === 'R') return
+        if (clickType === 'R') return;
         if (clickType === 'L') {
             modelCell.isShown = true;
             plantMines(gLevel.mines);
             updateModelData();
             if (modelCell.minesAroundCount === 0) revealSurroundings(i, j);
             renderField();
-            gOriginalField = saveCurrField()
+            gOriginalField = saveCurrField();
             gGame.isOn = true;
             gStartTime = new Date();
             gRunTime = setInterval(renderStats, 100);
@@ -101,37 +106,41 @@ function cellClicked(event, cell) {
         }
     }
     if (clickType === 'L') {
-        gOriginalField = saveCurrField()
+        gOriginalField = saveCurrField();
         if (gGame.state === 'hint') {
-            revealSurroundings(i, j)
+            revealSurroundings(i, j);
             renderElements();
-            gGame.state = gOriginalState
-            gOriginalState = 'hint'
+            gGame.state = gOriginalState;
+            gOriginalState = 'hint';
             setTimeout(function () {
                 gField = gOriginalField;
-                gOriginalState = gGame.state
+                gOriginalState = gGame.state;
                 renderElements();
             }, 1400)
-            return
+            return;
         }
         if (modelCell.isFlaged){
             return;
         } else {
+            gOriginalGame = saveCurrGameData();
+            renderUndoAvailble('block');
             modelCell.isShown = true;
             if (modelCell.isMine){
-                loseLife()
-            } else if (modelCell.minesAroundCount === 0) revealSurroundings(i, j)
+                loseLife();
+            } else if (modelCell.minesAroundCount === 0) revealSurroundings(i, j);
         }
-
+        
     } else if (clickType === 'R') {
-        gOriginalField = saveCurrField()
+        gOriginalField = saveCurrField();
         if (gGame.state === 'hint') {
-            gGame.state = gOriginalState
-            gGame.eyes++
-            renderElements()
-            return
+            gGame.state = gOriginalState;
+            gGame.eyes++;
+            renderElements();
+            return;
         }
         if (modelCell.isShown) return;
+        gOriginalGame = saveCurrGameData();
+        renderUndoAvailble('block');
         modelCell.isFlaged = !modelCell.isFlaged;
     }
     updateModelData();
@@ -168,7 +177,6 @@ function revealSurroundings(cellI, cellJ) {
         }
     }
 }
-
 
 function updateModelData() {
     var flagedMines = 0;
