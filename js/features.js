@@ -5,7 +5,6 @@ var gOriginalState = '';
 
 function safeClick() {
     if (!gGame.isOn) return;
-
     var validCells = [];
     for (var i = 1; i < gField.length; i++) {
         for (var j = 1; j < gField[i].length; j++) {
@@ -21,7 +20,7 @@ function safeClick() {
     gGame.shields--;
     renderShields();
 
-    var randNum = getRandomIntInclusive(0, validCells.length - 1);
+    var randNum = getRandomIntInclusive(0, validCells.length);
     var randCell = validCells.splice(randNum, 1);
     var pickedI = randCell[0].loc.i;
     var pickedJ = randCell[0].loc.j;
@@ -40,10 +39,7 @@ function glanceModeOn() {
 
 
 function undo() {
-    if (gGame.state === 'win' 
-    || gGame.state === 'lost' 
-    || gOriginalState === 'hint') return;
-    
+    if (gGame.state === 'win' || gGame.state === 'lost' || gOriginalState === 'hint') return;
     gField = gOriginalField;
     gGame = gOriginalGame;
     renderElements();

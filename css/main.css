@@ -29,6 +29,7 @@
 .hearts img {
     width: 17px;
     opacity: 0.6;
+    transition: 0.2s;
     margin-left: 4px;
     margin-right: 4px;
 }

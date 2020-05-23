@@ -95,7 +95,7 @@ function cellClicked(event, cell) {
         || gGame.state === 'lost'
         || gOriginalState === 'hint'
         || modelCell.isShown) return;
-    
+
     // First click:
     if (gGame.isOn === false) {
         if (clickType === 'R') return;

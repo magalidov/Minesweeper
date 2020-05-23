@@ -81,10 +81,8 @@ function renderField() {
             var cssClassMode = `${(gGame.state === 'hint') ? 'glance' : ''}`;
             var innerInfo = (cellModel.isShown) ? around : '';
             var imgType = (cellModel.isMine && cellModel.isShown) ? 'mine' : (cellModel.isFlaged) ? 'flag' : 'empty';
-            
             var innerImg = `<img src="img/${imgType}.png"></img>`;
             var innerDiv = `<div class="${cssClass} num${cssClassNumColor} ${cssClassMode}">${innerInfo} ${innerImg}</div>`;
-            
             strHTML += `<td ${locData} onclick="cellClicked(event,this)" oncontextmenu="cellClicked(event,this)">${innerDiv}</td>`;
         }
         strHTML += '</tr>';
