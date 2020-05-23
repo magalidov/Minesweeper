@@ -1,11 +1,17 @@
 .header{
      text-align: center;
-     margin-top: 20px;
      margin-bottom: 1px;
+     height:145px;
+    }
+.aid{
+    height:115px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 .reset{
+    height: 34px;
     display: block;
-    height: 37px;
     margin-bottom: 3px;
 }
 .reset img {
@@ -18,8 +24,7 @@
     opacity: 1;
 }
 .hearts {
-    height: 25px;
-    margin-bottom: 1px;
+    margin-bottom: 3px;
 }
 .hearts img {
     width: 17px;
@@ -27,51 +32,42 @@
     transition: 0.2s;
     margin-left: 4px;
     margin-right: 4px;
-    display: none;
 }
 .hearts img:hover {
     width: 21px;
     opacity: 1;
 }
-.safe-clicks {
-    height: 25px;
-}
+/* .safe-clicks {
+} */
 .safe-clicks img {
     width: 21px;
     opacity: 0.9;
     transition: 0.2s;
     margin-left: 5px;
     margin-right: 5px;
-    display: none;
 }
 .safe-clicks img:hover {
     cursor: pointer;
     width: 15px;
     opacity: 1;
 }
-.hints {
-    text-align: center;
-    margin-top: 0px;
-}
+/* .hints {
+} */
 .hints img {
     width: 23px;
-    opacity: 0.9;
     transition: 0.2s;
     margin-left: 6px;
     margin-right: 6px;
-    display: none;
-
 }
 .hints img:hover {
     cursor: pointer;
     width: 18px;
-    opacity: 1;
 }
 .flags-count{
     position: relative;
     display:inline-block;
     margin: auto;
-    width: 70px;
+    width: 87px;
     height: 30px;
     line-height: 30px;
     background-color: rgb(83, 244, 255);
@@ -82,7 +78,7 @@
     opacity: 0.3;
     position: absolute;
     left: 5px;
-    top: 5px
+    top: 7px
 
 }
 .flags-count span {
@@ -94,14 +90,14 @@
     position: relative;
     display:inline-block;
     margin: auto;
-    width: 70px;
+    width: 87px;
     height: 30px;
     line-height: 30px;
     background-color: rgb(252, 77, 77);
     overflow: hidden;
 }
 .timer img {
-    width: 20px;
+    width: 22px;
     opacity: 0.6;
     position: absolute;
     right: 2px;
@@ -112,8 +108,7 @@
     position: absolute;
     left: 10px;
 }
-/* .center{
-    
+/* .center{ 
 } */
 .field{
     border-collapse: collapse;
@@ -146,10 +141,6 @@
     line-height: 27px;
     vertical-align: middle;
     width: 22px;
-}
-.undo-button{
-    width: 20px;
-
 }
 .uncklicked{
     background: rgb(163, 163, 163);
@@ -199,17 +190,30 @@
 }
 .bottom{
      text-align: center;
-     margin-top: 10px;
+     margin-top: 5px;
 }
 .difficulty{
     display:inline-block;
     margin: auto;
-    width: 60px;
+    width: 56.8px;
     background-color: rgb(202, 202, 202);
 }
 .difficulty:hover{
     background-color: rgb(165, 165, 165);
     cursor: pointer;
+}
+.undo-button{
+    height: 30px;
+}
+.undo-button img{
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    width: 20px;
+}
+.undo-button img:hover{
+    cursor: pointer;
+    width: 30px;
 }
 .footer{
     text-align: center;

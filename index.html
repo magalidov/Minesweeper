@@ -13,44 +13,47 @@
 
     <div class="header">
 
-        <div class="reset" onclick="init()"></div>
+        <div class="aid">
+            
+            <div class="reset" onclick="init()"></div>
+            
+            <div class="hearts">
+                <img src="img/heart.png" class="heart1" alt="heart">
+                <img src="img/heart.png" class="heart2" alt="heart">
+                <img src="img/heart.png" class="heart3" alt="heart">
+            </div>
+            
+            <div class="safe-clicks">
+                <img src="img/safe.png" class="safe1" onclick="safeClick()" alt="shield">
+                <img src="img/safe.png" class="safe2" onclick="safeClick()" alt="shield">
+                <img src="img/safe.png" class="safe3" onclick="safeClick()" alt="shield">
+            </div>
+            
+            <div class="hints">
+                <img src="img/hint.png" class="hint1" onclick="glanceModeOn()" alt="undo">
+                <img src="img/hint.png" class="hint2" onclick="glanceModeOn()" alt="undo">
+                <img src="img/hint.png" class="hint3" onclick="glanceModeOn()" alt="undo">
+            </div>
 
-        <div class="hearts">
-            <img src="img/heart.png" class="heart1" alt="heart">
-            <img src="img/heart.png" class="heart2" alt="heart">
-            <img src="img/heart.png" class="heart3" alt="heart">
         </div>
-
-        <div class="safe-clicks">
-            <img src="img/safe.png" class="safe1" onclick="safeClick()" alt="shield">
-            <img src="img/safe.png" class="safe2" onclick="safeClick()" alt="shield">
-            <img src="img/safe.png" class="safe3" onclick="safeClick()" alt="shield">
+            
+            <div class="flags-count"><img src="img/flag.png"><span>0</span></div>
+            <div class="timer"><span>0</span><img src="img/clock.png"></div>
+            
         </div>
-
-        <div class="hints">
-            <img src="img/hint.png" class="hint1" onclick="glanceMode()" alt="undo">
-            <img src="img/hint.png" class="hint2" onclick="glanceMode()" alt="undo">
-            <img src="img/hint.png" class="hint3" onclick="glanceMode()" alt="undo">
-        </div>
-
-        <div class="flags-count"><img src="img/flag.png"><span>0</span></div>
-        <div class="timer"><span>0</span><img src="img/clock.png"></div>
+        
+        <div class="center">
+            
+            <table class="field">
+                <tbody></tbody>
+            </table>
 
     </div>
 
-    <div class="center">
-
-        <table class="field">
-            <tbody></tbody>
-        </table>
-
-    </div>
-
-
-
-    <!-- <img src="img/undo.png" class="undo-button" onclick="" alt="undo"> -->
+    
+    
     <div class="bottom">
-
+        
         <div class="difficulty" onclick="setGameDifficulty('easy');init();">
             Easy
         </div>
@@ -60,9 +63,12 @@
         <div class="difficulty" onclick="setGameDifficulty('hard');init();">
             Hard
         </div>
-
+        
     </div>
-
+    
+    <div class="undo-button">
+        <img src="img/undo.png" onclick="undo()" alt="undo">
+    </div>
     <!-- <table class="leadboard">
         <tr>
             <th>leadboard</th>
@@ -83,7 +89,9 @@
 
 
     <script src="js/util.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/features.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/model.js"></script>
 </body>
 
 </html>
